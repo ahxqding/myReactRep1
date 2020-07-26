@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {BrowserRouter as Router,Route,Link} from 'react-router-dom';
+import {BrowserRouter as Router,Route,Switch} from 'react-router-dom';
 import Login from './pages/login/Login';
 import Admin from './pages/admin/Admin';
 
@@ -16,8 +16,11 @@ class App extends Component {
     render() {
         return (
             <Router>
-                <Route path="/login" component={Login} />
-                <Route exact path="/" component={Admin} />
+                {/* Switch：只匹配其中一个 */}
+                <Switch>
+                    <Route path="/login" component={Login} />
+                    <Route path="/" component={Admin} />
+                </Switch>
             </Router>
         );
     }
