@@ -4,10 +4,9 @@
 4、后端：使用node+Express+Mongodb等技术
 5、采用模块化、组件化、工程化的模式开发
 
-引入antd以及按需打包：
+一、引入antd以及按需打包：https://ant.design/docs/react/use-with-create-react-app-cn
     1.下载组件包：yarn add antd
     2.下载依赖模块：yarn add react-app-rewired customize-cra babel-plugin-import
-                   yarn add less-loader@5.0.0
     3.定义加载配置的js 模块: config-overrides.js
           const {override, fixBabelImports} = require('customize-cra');
           module.exports = override(
@@ -49,6 +48,11 @@
                 解决办法：卸载less-loader，安装less-loader@5.0.0
                          yarn remove less-loader
                          yarn add less-loader@5.0.0
+            
+------------------------------------------------------------------------------------------------------------------------------------------
+
+二、引入路由：
+       1.下载工具包：yarn add react-router-dom
         
 
     

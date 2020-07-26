@@ -1,6 +1,8 @@
 import React,{Component} from 'react';
-import { Button,message } from 'antd';
-// import 'antd/dist/antd.css';
+import {BrowserRouter as Router,Route,Link} from 'react-router-dom';
+import Login from './pages/login/Login';
+import Admin from './pages/admin/Admin';
+
 /**
  * 应用的根组件
  */
@@ -10,15 +12,13 @@ class App extends Component {
         this.state = {  };
     }
 
-    handleClick =()=>{
-        message.success('This is a success message');
-    }
+    
     render() {
         return (
-            <div>
-                这是APP根组件
-                <Button type="primary" onClick={this.handleClick}>Primary Button</Button>
-            </div>
+            <Router>
+                <Route path="/login" component={Login} />
+                <Route exact path="/" component={Admin} />
+            </Router>
         );
     }
 }
