@@ -2,7 +2,12 @@ import React, { Component } from 'react';
 import './login.less';
 import logo from './images/logo.png';
 
-import { Form, Input, Button,Icon } from 'antd';
+import { Form, Input, Button,Icon, message } from 'antd';
+import {reqLogin} from '../../api';
+import memoryUtils from '../../utils/memoryUtils';
+import storageUtils from '../../utils/storageUtils';
+import {Redirect} from 'react-router-dom';
+
 
 const Item = Form.Item;//不能写在import之前
 /**
@@ -25,11 +30,48 @@ class Login extends Component {
     handleSubmit=(e)=>{
         // 阻止表单自动提交数据
         e.preventDefault();
-        //得到form对象
-        const form = this.props.form;
-        // 获取表单项的输入数据
-        const values = form.getFieldsValue();
-        console.log(values);
+        // 对所有的表单字段进行验证
+        this.props.form.validateFields(async (err,values)=>{
+            // 校验成功
+            if(!err){
+                console.log('提交的登录的ajax请求',values);
+                // 请求登录
+                const {username,password}= values;
+                // reqLogin(username,password).then(response=>{
+                //     console.log('成功了',response.data);
+                // }).catch(error=>{
+                //     console.log('失败了',error);
+                // });
+                /**
+                 * async和await
+                 * 1.作用：
+                 *       简化promise对象的使用：不用使用then来指定成功、失败的回调函数
+                 *       以同步编码的方式（没有回调函数）来实现异步流程
+                 * 2.哪里写await
+                 *       在返回Promise左侧写await；不想要promise，想要promise异步执行成功的value的数据
+                 * 3.哪里写async
+                 *       await所在函数（最近的）定义的左侧写async
+                 */
+                // 由于Ajax.js中已经将出错信息封装好了，外层调用就不需要再处理请求出错的信息了
+                const result = await reqLogin(username,password);//{status:0,data:user} // {status:1,msg:""}
+                console.log('请求成功',result);
+                if(result.status===0){
+                    //登陆成功
+                    message.success("登录成功！");
+                    
+                    // 将用户信息存起来,到后台管理界面展示
+                    const user = result.data;
+                    memoryUtils.user = user;//保存在内存中
+                    storageUtils.saveUser(user);//保存在localStorage中
+                    //跳转后台管理(不需要再回退回来)，如果需要回退回来就用push()
+                    this.props.history.replace('/')
+                }else{//登录失败
+                    message.error(result.msg);
+                }
+            }else{
+                console.log('校验失败！');
+            }
+        });
     }
     // 自定义验证规则，对密码进行自定义验证
     validatorPwd=(rule,value,callback)=>{
@@ -51,6 +93,13 @@ class Login extends Component {
         }
     }
     render() {
+ 
+        // 判断用户是否登录，如果用户已经登录，直接跳转到后台
+        if(memoryUtils.user && memoryUtils.user._id){
+            return <Redirect to='/'/>
+        }
+
+
         //获取form对象
         const form = this.props.form;
         const {getFieldDecorator} =form;
@@ -74,10 +123,11 @@ class Login extends Component {
                                         // 4.必须是英文、数字或下划线组成
                                         rules:[
                                             {required:true, witespace:true, message:'用户名不能为空'},
-                                            {max:12,message:'用户名不能超过12位'},
+                                            {max:12,message:'用户名不能超过12位'}, 
                                             {min:4,message:'用户名至少4位'},
                                             {pattern:/^[a-zA-Z0-9_]+$/,message:'用户名必须是英文、数字或下划线组成'},
                                         ],
+                                        initialValue:'admin'//指定初始值
                                     })(
                                         <Input prefix={<Icon type="user" style={{color:'rgba(0,0,0,.25)'}} />} placeholder="用户名" />
                                 )}
