@@ -40,7 +40,7 @@ class Admin extends Component {
                 {/* 右侧头部 */}
               <Header/>
               {/* 右侧中部 */}
-              <Content style={{backgroundColor:"#fff"}}>
+              <Content style={{margin:20, backgroundColor:"#fff"}}>
                   <Switch>
                       <Route path="/home" component={Home}/>
                       <Route path="/category" component={Category}/>
