@@ -27,8 +27,5 @@ export default function ajax(url,data={},type='GET'){
         }).catch(error=>{//3.如果失败了，不调用reject(reason)，而是提示异常信息
             message.error('请求出错了：'+error.message);//引入antd中message组件
         })
-        
-
-        
     })     
 }

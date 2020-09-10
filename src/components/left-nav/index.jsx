@@ -49,10 +49,15 @@ class Left extends Component {
         })
     }
     // 根据menuList的数据数组动态生成菜单项（标签数组）：使用reduce和递归调用
+    // reduce是做累计累加用的,有两个参数,
+    // 第一个参数:pre和item.
+    // pre: 上一次返回的数组,
+    // item: 这次的遍历的数组元素
+    // 第二个参数是初始值,这里就是一个空数组
     getMenuNodes_reduce=(menuList)=>{
         const path = this.props.location.pathname;
         return menuList.reduce((pre,item)=>{
-            // 像pre中添加</Menu.Item>或者添加<SubMenu>
+            // 向pre中添加</Menu.Item>或者添加<SubMenu>
             if(!item.children){
                 pre.push((
                     <Menu.Item key={item.key}>
@@ -64,10 +69,11 @@ class Left extends Component {
                 ));
             }else{
                 //查找一个与当前请求路径匹配的子Item
+                // 数组的find方法,如果当前的item等于要查找的值,那就返回true
                 const cItem = item.children.find(cItem=>cItem.key===path);
                 // 如果存在，说明当前item的子列表需要打开
                 if(cItem){
-                    this.openKey = item.key;
+                    this.openKey = item.key;// 往this里面存了一个openKey
                 }
                 
                 pre.push((
@@ -87,7 +93,7 @@ class Left extends Component {
                     </SubMenu>
                 ));
             }
-            return pre;
+            return pre;// !!!这里一定要把pre返回
         },[])
     }
 
