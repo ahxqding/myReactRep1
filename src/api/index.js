@@ -67,3 +67,6 @@ export const reqCategory = (categoryId) => ajax(BASE + '/manage/category/info', 
 
 // 更新商品的状态，上架或者下架
 export const reqUpdateStatus = (productId, status) => ajax(BASE + '/manage/product/updateStatus', {productId, status}, 'POST');
+
+// 删除上传的图片
+export const reqDeleteImg = (name) => ajax(BASE + '/manage/img/delete', {name}, 'POST');

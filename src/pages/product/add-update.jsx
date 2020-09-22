@@ -202,7 +202,7 @@ class ProductAddUpdate extends Component {
 
                     </Item>
                     <Item label='商品图片'>
-                        <PicturesWall ref={this.pw}/>
+                        <PicturesWall ref={this.pw} imgs={this.product.imgs}/>
                     </Item>
                     <Item label='商品详情'>
                         商品详情
